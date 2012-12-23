@@ -100,7 +100,7 @@ g.Controller = function(scene, camera, renderer) {
 	 // [test] line
     var geometryLine = new THREE.Geometry();
     geometryLine.vertices.push(camera.position);
-    geometryLine.vertices.push(new THREE.Vector3(0, 0, -1));
+    geometryLine.vertices.push(new THREE.Vector3(-13, 0, -1));
     // lines
     var line = new THREE.Line( geometryLine, new THREE.LineBasicMaterial( { color: 0xffffff, opacity: 0.5 } ) );
     scene.add( line );

@@ -41,6 +41,7 @@ THREE.PointerLockControls = function ( camera ) {
 
 		pitchObject.rotation.x = Math.max( - PI_2, Math.min( PI_2, pitchObject.rotation.x ) );
 
+		console.log(yawObject.rotation.y);
 	};
 
 	var onKeyDown = function ( event ) {
@@ -123,15 +124,25 @@ THREE.PointerLockControls = function ( camera ) {
 	};
 	
 	this.process = function(delta, map) {
-		var ray = new THREE.Ray( this.getObject().position, new THREE.Vector3(0, 0, -1) );
-		var results = ray.intersectObjects( map.collisionMesh );
-		if (results.length > 0) {
-			var distance = results[ 0 ].distance;
-			if ( distance > 0 && distance < 1 ) {
-				// wand
-				console.log ("wand");
+		// winkel => vector
+		// wir benutzen tangens
+		var winkel = yawObject.rotation.y;
+		if (winkel > 0 && winkel < PI_2) {
+			var x = Math.tan(winkel)*-1;
+			console.log("ray: "+x);
+			
+			var ray = new THREE.Ray( this.getObject().position, new THREE.Vector3(x, 0, -1) );
+			var results = ray.intersectObjects( map.collisionMesh );
+			if (results.length > 0) {
+				var distance = results[ 0 ].distance;
+				if ( distance > 0 && distance < 1 ) {
+					// wand
+					console.log ("wand");
+				}
 			}
 		}
+	
+
 	 	this.update( delta );
 	}
 
@@ -162,6 +173,10 @@ THREE.PointerLockControls = function ( camera ) {
 			velocity.y = Math.max( 0, velocity.y );
 
 		}
+		
+		//console.log("--")
+		//console.log(velocity);
+		//console.log(velocity.normalize());
 
 		yawObject.translateX( velocity.x );
 		yawObject.translateY( velocity.y ); 
