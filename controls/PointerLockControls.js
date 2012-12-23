@@ -4,7 +4,7 @@
 
 THREE.PointerLockControls = function ( camera ) {
 	this.eyeHeight = 0.2;
-	this.moveSpeed = 0.005;
+	this.moveSpeed = 0.035;
 	this.turnSpeed = 0.002;
 
 	var scope = this;
@@ -67,7 +67,7 @@ THREE.PointerLockControls = function ( camera ) {
 				break;
 
 			case 32: // space
-				if ( canJump === true ) velocity.y += thiz.eyeHeight;
+				if ( canJump === true ) velocity.y += thiz.eyeHeight*1.5;
 				canJump = false;
 				break;
 
@@ -121,6 +121,19 @@ THREE.PointerLockControls = function ( camera ) {
 		canJump = boolean;
 
 	};
+	
+	this.process = function(delta, map) {
+		var ray = new THREE.Ray( this.getObject().position, new THREE.Vector3(0, 0, -1) );
+		var results = ray.intersectObjects( map.collisionMesh );
+		if (results.length > 0) {
+			var distance = results[ 0 ].distance;
+			if ( distance > 0 && distance < 1 ) {
+				// wand
+				console.log ("wand");
+			}
+		}
+	 	this.update( delta );
+	}
 
 	this.update = function ( delta ) {
 
@@ -132,13 +145,18 @@ THREE.PointerLockControls = function ( camera ) {
 		velocity.z += ( - velocity.z ) * 0.08 * delta;
 
 		velocity.y -= 0.011 * delta;
+		
+		var speed = this.moveSpeed;
+		if ((moveForward || moveBackward) && (moveLeft || moveRight)) {
+			speed /= 1.5;
+		}
 
-		if ( moveForward ) velocity.z -= this.moveSpeed * delta;
-		if ( moveBackward ) velocity.z += this.moveSpeed * delta;
+		if ( moveForward ) velocity.z -= speed * delta;
+		if ( moveBackward ) velocity.z += speed * delta;
 
-		if ( moveLeft ) velocity.x -= this.moveSpeed * delta;
-		if ( moveRight ) velocity.x += this.moveSpeed * delta;
-
+		if ( moveLeft ) velocity.x -= speed * delta;
+		if ( moveRight ) velocity.x += speed * delta;
+		
 		if ( isOnObject === true ) {
 
 			velocity.y = Math.max( 0, velocity.y );
