@@ -41,7 +41,7 @@ THREE.PointerLockControls = function ( camera ) {
 
 		pitchObject.rotation.x = Math.max( - PI_2, Math.min( PI_2, pitchObject.rotation.x ) );
 
-		console.log(yawObject.rotation.y);
+		//console.log(yawObject.rotation.y);
 	};
 
 	var onKeyDown = function ( event ) {
@@ -124,6 +124,7 @@ THREE.PointerLockControls = function ( camera ) {
 	};
 	
 	this.process = function(delta, map) {
+	/****
 		// winkel => vector
 		// wir benutzen tangens
 		var winkel = yawObject.rotation.y;
@@ -142,7 +143,7 @@ THREE.PointerLockControls = function ( camera ) {
 			}
 		}
 	
-
+	****/
 	 	this.update( delta );
 	}
 

@@ -1,5 +1,8 @@
 "use strict";
 
+Physijs.scripts.worker = '../../Physijs/physijs_worker.js';
+Physijs.scripts.ammo = '../Physijs/examples/js/ammo.js';
+
 // namespace
 var g = {};
 var stats;
@@ -8,7 +11,7 @@ var stats;
  * System
  */
 g.System = function() {
-	var scene = new THREE.Scene();
+	var scene = new Physijs.Scene();
 	var camera = new THREE.PerspectiveCamera(60, window.innerWidth/window.innerHeight, 0.1, 1000);
 	var renderer = new THREE.WebGLRenderer();
 	renderer.setSize(window.innerWidth, window.innerHeight);
@@ -77,7 +80,7 @@ g.Map.prototype.load = function() {
 			var faceMaterial = new THREE.MeshLambertMaterial( materials[0] );
 			//var faceMaterial = new THREE.MeshBasicMaterial( { map: THREE.ImageUtils.loadTexture( 'ice.jpg' ), side: THREE.DoubleSide } );
 
-		   var mesh = new THREE.Mesh( geometry, faceMaterial );
+		   var mesh = new Physijs.ConcaveMesh( geometry, faceMaterial, 0 );
 		   thiz.collisionMesh.push(mesh);
 		   thiz.scene.add( mesh );
 		 }
@@ -158,6 +161,7 @@ g.Controller = function(scene, camera, renderer) {
 	 	delta = Date.now() - time;
 	 	controls.process(delta, map);
 	 	
+	 	scene.simulate(); // run physics
 	 	renderer.render(scene, camera);
 	 	
 	 	time = Date.now();
